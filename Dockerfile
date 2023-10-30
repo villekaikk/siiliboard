@@ -9,4 +9,4 @@ RUN go build -o siiliboard
 
 EXPOSE 8080
 
-CMD [ "siiliboard" ]
+CMD [ "./siiliboard" ]

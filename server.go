@@ -6,7 +6,7 @@ import (
 	"log"
 	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
-	"server/views"
+	"siiliboard/views"
 )
 
 
