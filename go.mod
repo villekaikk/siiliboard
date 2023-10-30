@@ -1,4 +1,4 @@
-module server
+module siiliboard
 
 go 1.21.3
 
