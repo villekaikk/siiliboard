@@ -9,15 +9,21 @@ import (
 	"server/views"
 )
 
+
 func main() {
 
 	err := godotenv.Load(".env")
 	if err != nil {
         log.Fatal("Error loading .env file")
     }
-
+	
+	// Setup router and image server
 	router := httprouter.New()
+	router.ServeFiles("/images/*filepath", http.Dir("./static/images/"))
+	
+	// Register views
     registerViews(router)
+
 	port := 8080
 	portStr := fmt.Sprintf(":%v", port)
 
