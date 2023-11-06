@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	
 	"siiliboard/internal/routes"
+	"siiliboard/internal/database"
 )
 
 var  default_port string = "8080"
@@ -29,6 +30,15 @@ func main() {
 		port = default_port
 	}
 
+    db, err := database.Connect()
+
+	if err != nil {
+		log.Fatalf("Error opening database connection - %v", err.Error())
+	}
+	defer db.Close()
+	database.GetDatabase()
+	database.CreateTables()
+
 	router := routes.NewRouter()
 	port = fmt.Sprintf(":%v", port)
 
@@ -38,7 +48,7 @@ func main() {
 }
 
 func setupLogger() {
-	log.SetFlags(log.Lmsgprefix)
+	log.SetFlags(log.Lshortfile)
 	datetime := "2006-01-02 15:04:05: "
 	log.SetPrefix(time.Now().Format(datetime))
 }
