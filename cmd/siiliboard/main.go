@@ -36,7 +36,6 @@ func main() {
 		log.Fatalf("Error opening database connection - %v", err.Error())
 	}
 	defer db.Close()
-	database.GetDatabase()
 	database.CreateTables()
 
 	router := routes.NewRouter()
