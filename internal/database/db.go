@@ -13,14 +13,22 @@ type DB struct {
 	database *sqlx.DB
 }
 
+type DBSettings struct {
+	Address string
+	Port string
+	User string
+	Password string
+	Database string
+}
+
 var ddb *DB = nil
 
-func Connect() (*DB, error) {
+func Connect(s *DBSettings) (*DB, error) {
 
-	dbAddr := "localhost"
-	dbPort := 5432
-	dbName := "siiliboard"
-	connStr := fmt.Sprintf("postgres://postgres:admin@%s:%d/%s?sslmode=disable", dbAddr, dbPort, dbName)
+	connStr := fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		s.User, s.Password, s.Address, s.Port, s.Database,
+	)
 
 	db, err := sqlx.Open("postgres", connStr)
 
@@ -34,7 +42,7 @@ func Connect() (*DB, error) {
 		return nil, err
 	}
 	
-	log.Printf("PostgreSQL connection established to %s:%d\n", dbAddr, dbPort)
+	log.Printf("PostgreSQL connection established to %s:%s\n", s.Address, s.Port)
 	ddb = &DB{db}
 	return ddb, nil
 }
