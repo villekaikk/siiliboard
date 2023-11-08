@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
@@ -8,15 +9,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
-
 type DB struct {
 	database *sqlx.DB
 }
 
 type DBSettings struct {
-	Address string
-	Port string
-	User string
+	Address  string
+	Port     string
+	User     string
 	Password string
 	Database string
 }
@@ -41,14 +41,14 @@ func Connect(s *DBSettings) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	log.Printf("PostgreSQL connection established to %s:%s\n", s.Address, s.Port)
 	ddb = &DB{db}
 	return ddb, nil
 }
 
-func GetDatabase() *DB {
-	
+func GetDatabase() (*DB, error) {
+
 	if ddb == nil {
 		log.Fatalln("Database not initialized")
 	}
@@ -57,10 +57,11 @@ func GetDatabase() *DB {
 	err := ddb.database.Ping()
 
 	if err != nil {
-		log.Fatal("Unable to reach the database")
+		log.Println("Unable to reach the database")
+		return nil, errors.New("Database unavailable")
 	}
 
-	return ddb
+	return ddb, nil
 }
 
 func (*DB) Close() error {
