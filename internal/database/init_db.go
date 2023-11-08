@@ -24,7 +24,7 @@ func createUserTable() {
 	query := `CREATE TABLE IF NOT EXISTS app_user (
 		user_id SERIAL PRIMARY KEY,
 		name VARCHAR(100) NOT NULL,
-		display_name VARCHAR(100), NOT NULL,
+		display_name VARCHAR(100) NOT NULL,
 		created timestamp DEFAULT NOW()
 	)`
 
