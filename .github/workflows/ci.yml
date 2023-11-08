@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: |
         go mod download
-        go build -v -o ./siiliboard-linux-amd64 ./cmd/siiliboard
+        go build -v -o ./siiliboard-linux-amd64 ./cmd
 
   build-windows:
     runs-on: windows-2022
@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: |
         go mod download
-        go build -v -o ./siiliboard-win-amd64.exe ./cmd/siiliboard
+        go build -v -o ./siiliboard-win-amd64.exe ./cmd

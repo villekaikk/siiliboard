@@ -12,8 +12,8 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"siiliboard/internal/api"
 	"siiliboard/internal/database"
-	"siiliboard/internal/routes"
 	"siiliboard/internal/utils"
 )
 
@@ -58,7 +58,7 @@ func main() {
 	defer db.Close()
 	database.CreateTables()
 
-	router := routes.NewRouter(rootPath)
+	router := api.NewRouter(rootPath)
 	port = fmt.Sprintf(":%v", port)
 
 	log.Printf("Starting the server at http:127.0.0.1%v\n", port)
@@ -133,7 +133,7 @@ func resolveEnv() {
 
 	env, _ := os.LookupEnv("ENV")
 	DEBUG = env == "DEBUG"
-	routes.DEBUG = DEBUG
+	api.DEBUG = DEBUG
 
 	if DEBUG {
 		log.Println("Application running in DEBUG env")

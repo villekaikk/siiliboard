@@ -10,7 +10,7 @@ RUN chmod -R 1000:1000 ./*
 USER 33:33
 
 RUN go mod download
-RUN go build -o siiliboard ./cmd/siiliboard
+RUN go build -o siiliboard ./cmd/
 
 EXPOSE $port
 
