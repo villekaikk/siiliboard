@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -19,7 +20,7 @@ func GetBoardsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 
 	if err != nil {
 		errCode := http.StatusInternalServerError
-		log.Printf("%d - Failed to fetch boards", errCode)
+		log.Printf("%d - Failed to fetch boards - %s", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Failed to fetch boards")
 		return
@@ -36,7 +37,31 @@ func GetBoardHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 	id := params.ByName("id")
 	log.Printf("GET Board %s\n", id)
-	fmt.Fprintf(w, "Requested board %s\n", id)
+
+	idd, err := strconv.Atoi(id)
+
+	if err != nil {
+		errCode := http.StatusBadRequest
+		log.Printf("%d - Invalid board Id %s - %s", errCode, id, err.Error())
+		w.WriteHeader(errCode)
+		fmt.Fprintf(w, "Invalid board id %s", id)
+		return
+	}
+
+	b, err := database.GetBoard(idd)
+
+	if err != nil {
+		errCode := http.StatusInternalServerError
+		log.Printf("%d - Failed to fetch boards - %s", errCode, err.Error())
+		w.WriteHeader(errCode)
+		fmt.Fprintf(w, "Failed to fetch boards")
+		return
+	}
+
+	status := http.StatusOK
+	log.Printf("%d - Get all board %d", status, idd)
+	w.WriteHeader(status)
+	fmt.Fprintf(w, "Boards: %v", b)
 }
 
 // POST /boards

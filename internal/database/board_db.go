@@ -13,7 +13,6 @@ func GetBoards() ([]domain.Board, error) {
 	db, err := GetDatabase()
 
 	if err != nil {
-		log.Printf("Unable to create new board: %s\n", err.Error())
 		return nil, err
 	}
 
@@ -22,10 +21,30 @@ func GetBoards() ([]domain.Board, error) {
 
 	if err != nil {
 		log.Printf("Error querying boards from the database: %s\n", err.Error())
-		return nil, errors.New("")
+		return nil, errors.New("Unable to query boards")
 	}
 
 	return boards, nil
+}
+
+func GetBoard(board_id int) (*domain.Board, error) {
+
+	db, err := GetDatabase()
+
+	if err != nil {
+		return nil, err
+	}
+
+	b := &domain.Board{}
+	q := "SELECT * FROM board WHERE board_id=($1)"
+	err = db.database.Get(b, q, board_id)
+
+	if err != nil {
+		log.Printf("Error querying board from the database: %s\n", err.Error())
+		return nil, errors.New("Unable to query boards")
+	}
+
+	return b, nil
 }
 
 func CreateBoard(br *marshal.BoardRequest) (*domain.Board, error) {
@@ -33,7 +52,6 @@ func CreateBoard(br *marshal.BoardRequest) (*domain.Board, error) {
 	db, err := GetDatabase()
 
 	if err != nil {
-		log.Printf("Unable to create new board: %s", err.Error())
 		return nil, err
 	}
 
