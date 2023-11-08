@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"text/template"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -16,8 +15,20 @@ import (
 func GetBoardsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	log.Println("GET Boards")
-	tmpl := template.Must(template.ParseFiles("templates/index.html"))
-	tmpl.Execute(w, nil)
+	boards, err := database.GetBoards()
+
+	if err != nil {
+		errCode := http.StatusInternalServerError
+		log.Printf("%d - Failed to fetch boards", errCode)
+		w.WriteHeader(errCode)
+		fmt.Fprintf(w, "Failed to fetch boards")
+		return
+	}
+
+	status := http.StatusOK
+	log.Printf("%d - Get all boards (%d)", status, len(boards))
+	w.WriteHeader(status)
+	fmt.Fprintf(w, "Boards: %v", boards)
 }
 
 // GET /board/<id>
@@ -43,7 +54,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 		return
 	}
 
-	id, err := database.CreateBoard(b)
+	board, err := database.CreateBoard(b)
 
 	if err != nil {
 		errCode := http.StatusInternalServerError
@@ -54,8 +65,9 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 	}
 
 	status := http.StatusCreated
-	log.Printf("%d - New board created: %d - %s", status, id, b.Name)
+	log.Printf("%d - New board created: %d - %s", status, board.Id, board.Name)
 	w.WriteHeader(status)
+	fmt.Fprintf(w, "Board: %v", board)
 }
 
 // DELETE /boards

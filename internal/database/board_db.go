@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"log"
 
 	"siiliboard/internal/domain"
@@ -9,33 +10,41 @@ import (
 
 func GetBoards() ([]domain.Board, error) {
 
-	_, err := GetDatabase()
+	db, err := GetDatabase()
+
+	if err != nil {
+		log.Printf("Unable to create new board: %s\n", err.Error())
+		return nil, err
+	}
+
+	boards := []domain.Board{}
+	err = db.database.Select(&boards, "SELECT * FROM board")
+
+	if err != nil {
+		log.Printf("Error querying boards from the database: %s\n", err.Error())
+		return nil, errors.New("")
+	}
+
+	return boards, nil
+}
+
+func CreateBoard(br *marshal.BoardRequest) (*domain.Board, error) {
+
+	db, err := GetDatabase()
 
 	if err != nil {
 		log.Printf("Unable to create new board: %s", err.Error())
 		return nil, err
 	}
 
-	return make([]domain.Board, 0), nil
-}
-
-func CreateBoard(br *marshal.BoardRequest) (int, error) {
-
-	db, err := GetDatabase()
+	b := &domain.Board{}
+	query := `INSERT INTO board (name) VALUES ($1) RETURNING *`
+	err = db.database.QueryRow(query, br.Name).Scan(b)
 
 	if err != nil {
-		log.Printf("Unable to create new board: %s", err.Error())
-		return -1, err
+		log.Printf("Unable to create new board: %s\n", err.Error())
+		return nil, err
 	}
 
-	query := `INSERT INTO board (name) VALUES ($1) RETURNING board_id`
-	var key int
-	err = db.database.QueryRow(query, br.Name).Scan(&key)
-
-	if err != nil {
-		log.Printf("Unable to create new board: %s", err.Error())
-		return -1, err
-	}
-
-	return key, nil
+	return b, nil
 }
