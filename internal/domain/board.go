@@ -5,8 +5,7 @@ import (
 )
 
 type Board struct {
-	Name string			`db:"name"`
-	Members []User 		`db:"members"`
-	Tickets []Ticket 	`db:"tickets"`
-	Created time.Time 	`db:"created"`
+	Id      int       `db:"board_id"`
+	Name    string    `db:"name"`
+	Created time.Time `db:"created"`
 }

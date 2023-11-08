@@ -5,7 +5,8 @@ import (
 )
 
 type Comment struct {
-	Content string		`db:"content"`
-	Author User			`db:"author"`
-	Created time.Time	`db:"created"`
+	Id      int       `db:"comment_id"`
+	Content string    `db:"content"`
+	Author  User      `db:"author"`
+	Created time.Time `db:"created"`
 }
