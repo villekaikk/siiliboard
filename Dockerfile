@@ -1,5 +1,4 @@
-FROM golang:1.21.3-bookworm
-
+FROM golang:1.21.4-bookworm
 ENV port 8080
 
 WORKDIR /siiliboard
