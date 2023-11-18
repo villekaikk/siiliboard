@@ -31,20 +31,6 @@ jobs:
         go mod download
         go build -v -o ./siiliboard-linux-amd64 ./cmd
 
-  build-windows:
-    runs-on: windows-2022
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.21.4'
-    - name: Build
-      run: |
-        go mod download
-        go build -v -o ./siiliboard-win-amd64.exe ./cmd
-
   build-docker:
     runs-on: ubuntu-latest
     needs: build-linux
