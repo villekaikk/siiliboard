@@ -54,6 +54,8 @@ jobs:
     - name: Build
       run: |
         echo 'Push job status: ${{ env.RUN_PUSH_JOB }}'
+        echo 'BASE_REF: ${{ github.GITHUB_BASE_REF }}
+        echo 'ACTION: ${{ github.ACTION }}
         docker build --tag ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} .
 
     - name: "Push docker image"
