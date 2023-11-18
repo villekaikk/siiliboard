@@ -10,7 +10,7 @@ on:
     branches: "*"
 
 env:
-  RUN_PUSH:JOB: ${{ github.GITHUB_BASE_REF == 'main' }} && ${{ github.ACTION == 'actions/push' }}
+  RUN_PUSH_JOB: ${{ github.GITHUB_BASE_REF == 'main' }} && ${{ github.ACTION == 'actions/push' }}
 
 jobs:
 
@@ -50,24 +50,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: docker build --tag siiliboard:latest .
+      run: |
+        echo 'Push job status: $RUN_PUSH_JOB'
+        docker build --tag siiliboard:latest .
 
-    - name: "Upload image artifact"
-      uses: actions/upload-artifact@v3
-      with:
-        name: siiliboard-latest
-        path: siiliboard:latest
-
-  push-docker:
-    runs-on: ubuntu-latest
-    needs: build-docker
-    if: ${{ vars.RUN_PUSH_JOB == 'true' }}
-    steps:
-      - name: Get built image
-        uses: actions/download-artifact@v3
-        with:
-          name: siiliboard-latest
-      - name: Login & push
-        run: |
-          echo 'Docker push'
-
+    - name: "Push docker image"
+      if: ${{ vars.RUN_PUSH_JOB == 'true' }}
+      run: |
+        echo 'Pushing docker image'
