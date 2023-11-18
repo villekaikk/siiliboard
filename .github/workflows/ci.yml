@@ -46,7 +46,7 @@ jobs:
 
   push-docker:
     
-    if: ${{ vars.RUN_PUSH_JOB == true}}
+    if: ${{ env.RUN_PUSH_JOB == true}}
     runs-on: ubuntu-latest
     needs: build-docker
   
