@@ -51,7 +51,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build
       run: |
-        echo 'Push job status: $RUN_PUSH_JOB'
+        echo 'Push job status: ${{ env.RUN_PUSH_JOB }}'
         docker build --tag siiliboard:latest .
 
     - name: "Push docker image"
