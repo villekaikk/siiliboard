@@ -1,14 +1,21 @@
 FROM golang:1.21.4-bookworm
 ENV port 8080
 
-WORKDIR siiliboard
+WORKDIR /app
 
 COPY . .
 
-RUN export GOPATH=.
 RUN go mod download
-RUN go build -o ./bin/siiliboard ./cmd/
+RUN go build -o siiliboard ./cmd/
 
 EXPOSE $port
 
-CMD [ "./bin/siiliboard" ]
+RUN useradd -U --shell /bin/bash --create-home siiliboard
+
+RUN mkdir ./log
+
+RUN chown -R siiliboard:siiliboard ./*
+
+USER siiliboard
+
+CMD [ "./siiliboard" ]
