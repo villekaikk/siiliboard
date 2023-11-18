@@ -10,7 +10,9 @@ on:
     branches: "*"
 
 env:
-  RUN_PUSH_JOB: ${{ github.GITHUB_BASE_REF == 'main' }} && ${{ github.ACTION == 'actions/push' }}
+  RUN_PUSH_JOB: ${{ github.GITHUB_BASE_REF == 'main' && github.ACTION == 'actions/push' }}
+  IMAGE_NAME: siiliboard
+  TAG_NAME: latest
 
 jobs:
 
@@ -52,7 +54,7 @@ jobs:
     - name: Build
       run: |
         echo 'Push job status: ${{ env.RUN_PUSH_JOB }}'
-        docker build --tag siiliboard:latest .
+        docker build --tag ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} .
 
     - name: "Push docker image"
       if: ${{ vars.RUN_PUSH_JOB == 'true' }}
