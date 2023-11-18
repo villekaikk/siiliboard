@@ -4,8 +4,8 @@ ENV port 8080
 WORKDIR /siiliboard
 
 COPY . .
-
-RUN chmod -R 1000:1000 ./*
+RUN useradd -ms /bin/bash www-data
+RUN chmod -R www-data:www-data ./*
 USER 33:33
 
 RUN go mod download
