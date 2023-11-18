@@ -59,11 +59,12 @@ jobs:
         docker build --tag ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} .
 
   push-docker:
+    
+    if: ${{ vars.RUN_PUSH_JOB }}
     runs-on: ubuntu-latest
     needs: build-docker
   
     steps:
     - name: "Push docker image"
-      if: ${{ vars.RUN_PUSH_JOB == true }}
       run: |
         echo 'Pushing docker image'
