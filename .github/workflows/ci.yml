@@ -40,3 +40,12 @@ jobs:
       run: |
         go mod download
         go build -v -o ./siiliboard-win-amd64.exe ./cmd
+
+  build-docker:
+    runs-on: ubuntu-latest
+
+    needs: build-linux
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: docker build --tag siiliboard:latest .
