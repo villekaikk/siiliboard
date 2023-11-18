@@ -10,7 +10,7 @@ on:
     branches: "*"
 
 env:
-  RUN_PUSH_JOB: ${{ github.GITHUB_BASE_REF == 'main' && github.ACTION == 'actions/push' }}
+  RUN_PUSH_JOB: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
   IMAGE_NAME: siiliboard
   TAG_NAME: latest
 
@@ -54,6 +54,8 @@ jobs:
     - name: Build
       run: |
         echo 'Push job status: ${{ env.RUN_PUSH_JOB }}'
+        echo 'GITHUB_REF: ${{ github.ref_name }}'
+        echo 'EVENT_NAME: ${{ github.event_name }}'
         docker build --tag ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} .
 
     - name: "Push docker image"
