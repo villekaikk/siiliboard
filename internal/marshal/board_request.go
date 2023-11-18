@@ -1,7 +1,7 @@
 package marshal
 
 import (
-	"errors"
+	"fmt"
 	"siiliboard/internal/utils"
 )
 
@@ -11,8 +11,8 @@ type BoardRequest struct {
 
 func (b BoardRequest) Validate() error {
 
-	if utils.IsEmpty(b.Name) {
-		return errors.New("Could not serialize 'name'")
+	if utils.IsStringEmpty(b.Name) {
+		return fmt.Errorf("Could not serialize ticket 'name'")
 	}
 
 	return nil

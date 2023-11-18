@@ -1,0 +1,60 @@
+.main-bg {
+    background: grey;
+}
+
+#content-row {
+    background-color: grey;
+    
+}
+
+h3 {
+    color:black
+}
+
+.board-title {
+    vertical-align: bottom;
+}
+
+/*#b0dbfc*/
+.ticket-board {
+    background-color: #dbeefc;
+    margin: 5px;
+    height: 40rem
+}
+
+a.list-group-item-action {
+    background-color: white;
+    height: 60px;
+    margin: 5px;
+    text-align: justify;
+}
+
+.ticket-lane {
+    margin: 5px
+}
+
+.ticket {
+    background-color: rgb(0,0,0,0);
+    border: 0.5px solid rgb(0, 0, 0);
+    margin: 2px
+}
+
+.ticket:hover {
+    background-color: rgb(151, 205, 247)
+}
+
+.btn-element-add {
+    width: 120px;
+    height: 40px;
+    border: 0.5px solid black;
+    font-size: large;
+    margin-left: 15px;
+}
+
+.btn-element-add:hover {
+    background-color: white;
+}
+
+.new-board-modal{
+    background-color: white;
+}

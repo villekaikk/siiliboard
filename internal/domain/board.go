@@ -9,3 +9,7 @@ type Board struct {
 	Name    string    `db:"name"`
 	Created time.Time `db:"created"`
 }
+
+func NewBoard() *Board {
+	return &Board{}
+}

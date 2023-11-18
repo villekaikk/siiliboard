@@ -8,5 +8,9 @@ type User struct {
 	Id          int       `db:"user_id"`
 	Name        string    `db:"name"`
 	DisplayName string    `db:"display_name"`
-	Created     time.Time `db:"created"`
+	Created     time.Time `db:"created,omitempty"`
+}
+
+func NewUser() *User {
+	return &User{}
 }

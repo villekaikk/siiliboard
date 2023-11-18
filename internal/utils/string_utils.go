@@ -1,9 +1,7 @@
 package utils
 
-import (
-	"strings"
-)
+import "strings"
 
-func IsEmpty(s string) bool {
+func IsStringEmpty(s string) bool {
 	return len(strings.TrimSpace(s)) == 0
 }

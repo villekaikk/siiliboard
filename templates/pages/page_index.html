@@ -1,0 +1,51 @@
+<!DOCTYPE html> <html>
+
+<head>
+    <title>Siiliboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="icon" type="image/x-icon" href="images/kiwi.jpg">
+</head>
+
+<body class="main-bg">
+    <div class="container">
+        <div class="row" id="top-row" style="height: 15rem;">
+            <h1 class="text-light">Welcome to Siiliboard</h1>
+        </div>
+
+        <div class="row" id="control-row" style="height: 3rem;">
+            <button class="col-1 btn-element-add btn" style="margin-left: 0px"
+                hx-get="/newboard"
+                hx-target="#new-board-modal"
+                hx-trigger="click"
+                data-bs-toggle="modal"
+                data-bs-target="#new-board-modal"
+                class="btn btn-primary">New Board
+            </button>
+        </div>
+
+        <div id="new-board-modal"
+            class="modal modal-blur fade"
+            style="display: none"
+            aria-hidden="false"
+            tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="new-board-modal modal-dialog"></div>
+            </div>
+        </div>
+
+        <div class="row text-light border border-rounded" id="content-row" style="height: 40rem;">
+            <div class="col-12 board-list">
+                <h3>Select a board</h3>
+                <ul id="board-list" class="list-group fs-5 me-5" hx-get="/boards" hx-trigger="load" hx-swap="beforeend">
+                </ul>
+            </div>
+        </div>
+
+        <div class="row" id="bottom-row" style="height: 200px;"></div>
+    </div>
+</body>
+
+</html>

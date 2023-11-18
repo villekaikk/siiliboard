@@ -1,0 +1,28 @@
+{{ block "new-ticket" . }}
+<div class="modal-dialog modal-dialog-centered modal">
+      <div class="modal-content">
+
+          <div class="modal-header">
+              <h5 class="modal-title">New ticket</h5>
+          </div>
+
+          <div class="modal-body">
+              <p>Modal body text goes here.</p>
+          </div>
+
+          <div class="modal-footer">
+
+              <button type="button"
+                  class="btn btn-secondary"
+                  hx-trigger="click"
+                  hx-post="/boards/{{.Id}}/tickets"
+                  hx-target="#tickets-todo" 
+                  hx-swap="beforeend"
+                  data-bs-dismiss="modal">Create
+              </button>
+
+          </div>
+
+      </div>
+</div>
+{{ end }}

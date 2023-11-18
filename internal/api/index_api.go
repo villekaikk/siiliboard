@@ -11,7 +11,7 @@ import (
 // GET /
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	log.Println("GET Index")
-	tmpl := template.Must(template.ParseFiles("templates/index.html"))
+	log.Println("GET /")
+	tmpl := template.Must(template.ParseFiles("templates/pages/page_index.html"))
 	tmpl.Execute(w, nil)
 }

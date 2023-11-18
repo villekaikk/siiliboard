@@ -1,0 +1,27 @@
+{{ block "new-board" . }}
+<div class="modal-dialog modal-dialog-centered">
+	<div class="modal-content">
+
+		<div class="modal-header">
+			<h5 class="modal-title">Create New Board</h5>
+		</div>
+
+		<div class="modal-body">
+			<form>
+				<input id="board-name" name="board-name" placeholder="Enter a name for the board" style="width: 300px;"/>
+
+				<button type="button"
+					type="submit"
+					class="btn btn-secondary"
+					hx-trigger="click"
+					hx-post="/boards"
+					hx-target="#board-list" 
+					hx-swap="beforeend"
+					data-bs-dismiss="modal">Create
+				</button>
+			</form>
+		</div>
+
+	</div>
+</div>
+{{ end }}

@@ -19,6 +19,9 @@ func NewRouter(rootPath string) *httprouter.Router {
 	router := httprouter.New()
 	router.ServeFiles("/images/*filepath", http.Dir(iPath))
 
+	cssPath := filepath.Join(rootPath, "static", "styles") + "/"
+	router.ServeFiles("/styles/*filepath", http.Dir(cssPath))
+
 	registerViews(router)
 	return router
 }
@@ -26,19 +29,28 @@ func NewRouter(rootPath string) *httprouter.Router {
 func registerViews(router *httprouter.Router) {
 
 	router.GET("/", Index)
+
+	router.GET("/newboard", GetNewBoardModal)
 	router.GET("/boards", GetBoardsHandler)
-	router.GET("/boards/:id", GetBoardHandler)
+	router.GET("/boards/:bid", GetBoardHandler)
 	router.POST("/boards", CreateBoardHandler)
 
+	router.GET("/boards/:bid/tickets", GetTicketsHandler)
+	router.GET("/boards/:bid/tickets/:tid", GetTicketHandler)
+	router.POST("/boards/:bid/tickets", CreateTicketHandler)
+	router.GET("/boards/:bid/newticket", GetNewTicketModal)
+
+	router.POST("/users", CreateUserHandler)
+	router.GET("/users/:uid", GetUserHandler)
+
 	if DEBUG {
-		router.DELETE("/boards", RemoveAllBoardsHandler)
+		router.DELETE("/boards/:bid", RemoveAllBoardsHandler)
 	}
 }
 
 func readBodyToModel(r *http.Request, rt marshal.RequestTemplate) error {
 
 	body, err := io.ReadAll(r.Body)
-
 	if err != nil {
 		log.Printf("Error reading request body: - %s\n", err.Error())
 		return err

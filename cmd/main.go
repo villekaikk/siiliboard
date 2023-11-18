@@ -30,9 +30,15 @@ func main() {
 
 	defer logFile.Close()
 
-	err = godotenv.Load(".env")
+	e, err := utils.FileExists(".env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("No .env file to load")
+	}
+	if e {
+		err = godotenv.Load(".env")
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
 	resolveEnv()
@@ -49,7 +55,7 @@ func main() {
 		log.Fatalf("Unable to resolve database settings - %s\n", err.Error())
 	}
 
-	db, err := database.Connect(s)
+	db, err := database.New(s)
 
 	if err != nil {
 		log.Fatalf("Error opening database connection - %v\n", err.Error())
@@ -61,7 +67,7 @@ func main() {
 	router := api.NewRouter(rootPath)
 	port = fmt.Sprintf(":%v", port)
 
-	log.Printf("Starting the server at http:127.0.0.1%v\n", port)
+	log.Printf("Starting the server at http://127.0.0.1%v\n", port)
 
 	log.Fatal(http.ListenAndServe(port, router))
 }
@@ -96,27 +102,22 @@ func setupLogger(rootPath string) *os.File {
 func resolveDBSettings() (*database.DBSettings, error) {
 
 	pq_user, succ := os.LookupEnv("PQ_USER")
-	if !succ || utils.IsEmpty(pq_user) {
+	if !succ || utils.IsStringEmpty(pq_user) {
 		return nil, errors.New("PQ_USER not defined")
 	}
 
 	pq_passwd, succ := os.LookupEnv("PQ_PASSWD")
-	if !succ || utils.IsEmpty(pq_passwd) {
+	if !succ || utils.IsStringEmpty(pq_passwd) {
 		return nil, errors.New("PQ_PASSWD not defined")
 	}
 
-	pq_db, succ := os.LookupEnv("PQ_DB")
-	if !succ || utils.IsEmpty(pq_db) {
-		return nil, errors.New("PQ_DB not defined")
-	}
-
 	pq_addr, succ := os.LookupEnv("PQ_ADDR")
-	if !succ || utils.IsEmpty(pq_addr) {
+	if !succ || utils.IsStringEmpty(pq_addr) {
 		return nil, errors.New("PQ_ADDR not defined")
 	}
 
 	pq_port, succ := os.LookupEnv("PQ_PORT")
-	if !succ || utils.IsEmpty(pq_port) {
+	if !succ || utils.IsStringEmpty(pq_port) {
 		return nil, errors.New("PQ_PORT not defined")
 	}
 
@@ -125,7 +126,6 @@ func resolveDBSettings() (*database.DBSettings, error) {
 		Port:     pq_port,
 		User:     pq_user,
 		Password: pq_passwd,
-		Database: pq_db,
 	}, nil
 }
 

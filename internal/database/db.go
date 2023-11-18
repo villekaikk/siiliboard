@@ -10,7 +10,7 @@ import (
 )
 
 type DB struct {
-	database *sqlx.DB
+	Database *sqlx.DB
 }
 
 type DBSettings struct {
@@ -18,16 +18,15 @@ type DBSettings struct {
 	Port     string
 	User     string
 	Password string
-	Database string
 }
 
 var ddb *DB = nil
 
-func Connect(s *DBSettings) (*DB, error) {
+func New(s *DBSettings) (*DB, error) {
 
 	connStr := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		s.User, s.Password, s.Address, s.Port, s.Database,
+		"postgres://%s:%s@%s:%s/siiliboard?sslmode=disable",
+		s.User, s.Password, s.Address, s.Port,
 	)
 
 	db, err := sqlx.Open("postgres", connStr)
@@ -54,7 +53,7 @@ func GetDatabase() (*DB, error) {
 	}
 
 	// sanity check, remove later on
-	err := ddb.database.Ping()
+	err := ddb.Database.Ping()
 
 	if err != nil {
 		log.Println("Unable to reach the database")
@@ -70,7 +69,7 @@ func (*DB) Close() error {
 		return nil
 	}
 
-	err := ddb.database.Close()
+	err := ddb.Database.Close()
 	if err != nil {
 		return err
 	}
