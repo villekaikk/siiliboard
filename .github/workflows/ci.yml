@@ -50,6 +50,11 @@ jobs:
     needs: build-docker
   
     steps:
+    - name: "Login to registry"
+      run: docker login -u ${{ secrets.DOCKER_REGISTRY_USER }} -p ${{ secrets.DOCKER_REGISTRY_PW }} ${{ secrets.DOCKER_REGISTRY_URL }}
+    
+    - name: "Build image"
+      run: docker build --tag ${{ secrets.DOCKER_REGISTRY_URL }}/${{ env.IMAGE_NAME}}:${{ env.TAG_NAME }} .
+
     - name: "Push docker image"
-      run: |
-        echo 'Pushing docker image'
+      run: docker push ${{ secrets.DOCKER_REGISTRY_URL }}/${{ env.IMAGE_NAME}}:${{ env.TAG_NAME }}
