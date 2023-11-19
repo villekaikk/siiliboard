@@ -38,11 +38,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: |
-        echo 'Push job status: ${{ env.RUN_PUSH_JOB }}'
-        echo 'GITHUB_REF: ${{ github.ref_name }}'
-        echo 'EVENT_NAME: ${{ github.event_name }}'
-        docker build --tag ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} .
+      run: docker build --tag ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} .
 
   push-docker:
     if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
