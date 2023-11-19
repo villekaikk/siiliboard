@@ -50,6 +50,7 @@ jobs:
     needs: build-docker
   
     steps:
+    - uses: actions/checkout@v3
     - name: "Login to registry"
       run: docker login -u ${{ secrets.DOCKER_REGISTRY_USER }} -p ${{ secrets.DOCKER_REGISTRY_PW }} ${{ secrets.DOCKER_REGISTRY_URL }}
     
