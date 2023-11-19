@@ -1,7 +1,9 @@
 package database
 
 import (
+	"database/sql"
 	"log"
+	"siiliboard/internal/domain"
 )
 
 func CreateTables() {
@@ -11,6 +13,8 @@ func CreateTables() {
 	createBoardMemberTable()
 	createTicketTable()
 	createCommentTable()
+
+	createDefaultUsers()
 }
 
 func createUserTable() {
@@ -125,4 +129,37 @@ func createTicketTable() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+}
+
+func createDefaultUsers() {
+	db, err := GetDatabase()
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	// Create 'unassigned' user if one does not already exist
+	query := "SELECT * FROM app_user WHERE user_id = 0"
+
+	u := &domain.User{}
+	err = db.Database.Get(u, query)
+
+	// User found, bail out
+	if err == nil {
+		return
+	}
+
+	if err != sql.ErrNoRows {
+		log.Fatalf("Unable to insert default user 'unassigned' - %s", err.Error())
+	}
+
+	insert := `INSERT INTO app_user (user_id, name, display_name) VALUES ($1, $2, $3)`
+
+	_, err = db.Database.Exec(insert, 0, "unassigned", "unassigned")
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	log.Println("Inserted user 'unassigned' to the database")
 }
