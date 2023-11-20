@@ -24,10 +24,7 @@ var ddb *DB = nil
 
 func New(s *DBSettings) (*DB, error) {
 
-	connStr := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/siiliboard?sslmode=disable",
-		s.User, s.Password, s.Address, s.Port,
-	)
+	connStr := fmt.Sprintf("user=%s password=%s dbname=siiliboard host=%s port=%s sslmode=disable", s.User, s.Password, s.Address, s.Port)
 
 	db, err := sqlx.Open("postgres", connStr)
 
