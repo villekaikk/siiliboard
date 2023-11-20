@@ -111,6 +111,17 @@ func resolveDBSettings() (*database.DBSettings, error) {
 		return nil, errors.New("PQ_PASSWD not defined")
 	}
 
+	// If given secret is a file, use its contents. Otherwise just use the secret as is
+	secret, err := try_read_secret(pq_passwd)
+
+	if err != nil {
+		return nil, fmt.Errorf("Unexpected error reading PQ_PASSWD secret - %s", err.Error())
+	}
+
+	if !utils.IsStringEmpty(secret) {
+		pq_passwd = secret
+	}
+
 	pq_addr, succ := os.LookupEnv("PQ_ADDR")
 	if !succ || utils.IsStringEmpty(pq_addr) {
 		return nil, errors.New("PQ_ADDR not defined")
@@ -138,4 +149,26 @@ func resolveEnv() {
 	if DEBUG {
 		log.Println("Application running in DEBUG env")
 	}
+}
+
+func try_read_secret(secret_path string) (string, error) {
+
+	pq_abs_path, err := filepath.Abs(secret_path)
+	if err != nil {
+		return "", err
+	}
+	r, err := utils.FileExists(pq_abs_path)
+	if err != nil {
+		return "", err
+	}
+
+	if r {
+		txt, err := os.ReadFile(pq_abs_path)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return string(txt), nil
+	}
+
+	return "", nil
 }
