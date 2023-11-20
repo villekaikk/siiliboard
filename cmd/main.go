@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -167,7 +168,7 @@ func try_read_secret(secret_path string) (string, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		return string(txt), nil
+		return strings.TrimSpace(string(txt)), nil
 	}
 
 	return "", nil
