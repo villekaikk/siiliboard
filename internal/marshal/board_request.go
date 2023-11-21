@@ -2,11 +2,15 @@ package marshal
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"siiliboard/internal/utils"
+
+	"github.com/gorilla/schema"
 )
 
 type BoardRequest struct {
-	Name string `json:"name"`
+	Name string `schema:"board-name"`
 }
 
 func (b BoardRequest) Validate() error {
@@ -16,4 +20,17 @@ func (b BoardRequest) Validate() error {
 	}
 
 	return nil
+}
+
+func NewBoardRequest(r *http.Request, d schema.Decoder) (*BoardRequest, error) {
+
+	var b BoardRequest
+	err := d.Decode(&b, r.PostForm)
+
+	if err != nil {
+		log.Printf("Error decoding BoardRequest - %s", err.Error())
+		return nil, err
+	}
+
+	return &b, nil
 }

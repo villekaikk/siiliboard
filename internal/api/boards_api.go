@@ -79,10 +79,27 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 	endpoint := fmt.Sprintf("POST %s", r.URL)
 	log.Println(endpoint)
 
-	board_name := r.PostFormValue("board-name")
+	err := r.ParseForm()
 
-	b := &marshal.BoardRequest{Name: board_name}
-	err := b.Validate()
+	if err != nil {
+		errCode := http.StatusBadRequest
+		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		w.WriteHeader(errCode)
+		fmt.Fprintf(w, "Invalid form data")
+		return
+	}
+
+	b, err := marshal.NewBoardRequest(r, *decoder)
+
+	if err != nil {
+		errCode := http.StatusBadRequest
+		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		w.WriteHeader(errCode)
+		fmt.Fprintf(w, "Unable to deserialize form")
+		return
+	}
+
+	err = b.Validate()
 
 	if err != nil {
 		errCode := http.StatusBadRequest

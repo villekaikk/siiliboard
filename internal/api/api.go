@@ -8,10 +8,12 @@ import (
 	"path/filepath"
 	"siiliboard/internal/marshal"
 
+	"github.com/gorilla/schema"
 	"github.com/julienschmidt/httprouter"
 )
 
 var DEBUG bool = false
+var decoder = schema.NewDecoder()
 
 func NewRouter(rootPath string) *httprouter.Router {
 
