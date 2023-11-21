@@ -56,7 +56,7 @@ func main() {
 		log.Fatalf("Unable to resolve database settings - %s\n", err.Error())
 	}
 
-	db, err := database.New(s)
+	db, err := database.NewDatabase(s)
 
 	if err != nil {
 		log.Fatalf("Error opening database connection - %v\n", err.Error())

@@ -22,7 +22,7 @@ type DBSettings struct {
 
 var ddb *DB = nil
 
-func New(s *DBSettings) (*DB, error) {
+func NewDatabase(s *DBSettings) (*DB, error) {
 
 	connStr := fmt.Sprintf("user=%s password=%s dbname=siiliboard host=%s port=%s sslmode=disable", s.User, s.Password, s.Address, s.Port)
 
