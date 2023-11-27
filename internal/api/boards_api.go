@@ -16,20 +16,17 @@ import (
 // GET /boards
 func GetBoardsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	endpoint := fmt.Sprintf("GET %s", r.URL)
-	log.Println(endpoint)
 	boards, err := database.GetBoards()
 
 	if err != nil {
 		errCode := http.StatusInternalServerError
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Failed to fetch boards")
 		return
 	}
 
 	status := http.StatusOK
-	log.Printf("%d - %s {%d}\n", status, endpoint, len(boards))
 	w.WriteHeader(status)
 
 	tmpl := template.Must(template.ParseFiles("templates/fragments/boards.html"))
@@ -42,14 +39,11 @@ func GetBoardsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 func GetBoardHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
 	id := params.ByName("bid")
-	endpoint := fmt.Sprintf("GET %s", r.URL)
-	log.Println(endpoint)
-
 	idd, err := strconv.Atoi(id)
 
 	if err != nil {
 		errCode := http.StatusBadRequest
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Invalid board id %s", id)
 		return
@@ -59,16 +53,14 @@ func GetBoardHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 	if err != nil {
 		errCode := http.StatusInternalServerError
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Failed to fetch boards")
 		return
 	}
 
 	status := http.StatusOK
-	log.Printf("%d - %s", status, endpoint)
 	w.WriteHeader(status)
-	//fmt.Fprintf(w, "Boards: %v", b)
 	tmpl := template.Must(template.ParseFiles("templates/pages/page_board.html"))
 	tmpl.Execute(w, b)
 }
@@ -76,14 +68,11 @@ func GetBoardHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 // POST /boards
 func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	endpoint := fmt.Sprintf("POST %s", r.URL)
-	log.Println(endpoint)
-
 	err := r.ParseForm()
 
 	if err != nil {
 		errCode := http.StatusBadRequest
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Invalid form data")
 		return
@@ -93,7 +82,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 
 	if err != nil {
 		errCode := http.StatusBadRequest
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Unable to deserialize form")
 		return
@@ -103,7 +92,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 
 	if err != nil {
 		errCode := http.StatusBadRequest
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, err.Error())
 		return
@@ -113,14 +102,13 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 
 	if err != nil {
 		errCode := http.StatusInternalServerError
-		log.Printf("%d - %s - %s\n", errCode, endpoint, err.Error())
+		log.Printf("ERROR - %d - %s\n", errCode, err.Error())
 		w.WriteHeader(errCode)
 		fmt.Fprintf(w, "Failed to create a new board")
 		return
 	}
 
 	status := http.StatusCreated
-	log.Printf("%d - %s - %s\n", status, endpoint, board.Name)
 	w.WriteHeader(status)
 
 	tmpl := template.Must(template.ParseFiles("templates/fragments/boards.html"))
@@ -129,17 +117,12 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request, params httproute
 
 // DELETE /boards/:bid
 func RemoveAllBoardsHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	log.Printf("DELETE %s\n", r.URL)
 }
 
 // GET /newboard
 func GetNewBoardModal(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	endpoint := fmt.Sprintf("GET %s", r.URL)
-	log.Println(endpoint)
-
 	status := http.StatusOK
-	log.Printf("%d - %s\n", status, endpoint)
 	w.WriteHeader(status)
 
 	tmpl := template.Must(template.ParseFiles("templates/modals/new_board_modal.html"))

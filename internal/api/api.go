@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"siiliboard/internal/marshal"
+	"siiliboard/internal/middleware"
 
 	"github.com/gorilla/schema"
 	"github.com/julienschmidt/httprouter"
@@ -32,18 +33,18 @@ func registerViews(router *httprouter.Router) {
 
 	router.GET("/", Index)
 
-	router.GET("/newboard", GetNewBoardModal)
-	router.GET("/boards", GetBoardsHandler)
-	router.GET("/boards/:bid", GetBoardHandler)
-	router.POST("/boards", CreateBoardHandler)
+	router.GET("/newboard", middleware.LogHTTP(GetNewBoardModal))
+	router.GET("/boards", middleware.LogHTTP(GetBoardsHandler))
+	router.GET("/boards/:bid", middleware.LogHTTP(GetBoardHandler))
+	router.POST("/boards", middleware.LogHTTP(CreateBoardHandler))
 
-	router.GET("/boards/:bid/tickets", GetTicketsHandler)
-	router.GET("/boards/:bid/tickets/:tid", GetTicketHandler)
-	router.POST("/boards/:bid/tickets", CreateTicketHandler)
-	router.GET("/boards/:bid/newticket", GetNewTicketModal)
+	router.GET("/boards/:bid/tickets", middleware.LogHTTP(GetTicketsHandler))
+	router.GET("/boards/:bid/tickets/:tid", middleware.LogHTTP(GetTicketHandler))
+	router.POST("/boards/:bid/tickets", middleware.LogHTTP(CreateTicketHandler))
+	router.GET("/boards/:bid/newticket", middleware.LogHTTP(GetNewTicketModal))
 
-	router.POST("/users", CreateUserHandler)
-	router.GET("/users/:uid", GetUserHandler)
+	router.POST("/users", middleware.LogHTTP(CreateUserHandler))
+	router.GET("/users/:uid", middleware.LogHTTP(GetUserHandler))
 
 	if DEBUG {
 		router.DELETE("/boards/:bid", RemoveAllBoardsHandler)
