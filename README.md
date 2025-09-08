@@ -1,7 +1,5 @@
 # siiliboard
-The siiliest of all the boards
-
-Ticket board implemented using HTMX and Go.
+Ticket board implemented using HTMX and Go. Created for learning Go ecosystem and HTMX.
 
 ## SETUP
 `go mod init server`
